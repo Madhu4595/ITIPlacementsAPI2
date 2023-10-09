@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,11 +17,19 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.iti.model.ResponseObject;
+import com.iti.model.TokenRequestModel;
+import com.iti.model.TokenResponseModel;
+import com.iti.model.TokenValidateReqModel;
+import com.iti.model.TokenValidateRespModel;
 
 
 
 @Component
 public class MyUtil {
+	
+	
+	@Value("${generateToken}") private String generateToken;
+	@Value("${validateToken}") private String validateToken;
 
 	public static Connection getConnection() {
 		Connection connection = null;
@@ -123,6 +132,54 @@ public class MyUtil {
 		return dist_code;
 		
 	}
+	
+	public String generateToken(TokenRequestModel entity) {
+		System.out.println("generateToken=>"+entity.toString());
+		String jwtToken = null;
+		
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			
+			ResponseEntity<TokenResponseModel> responsee = restTemplate.postForEntity(generateToken, entity, TokenResponseModel.class);
+			System.out.println("response==>"+responsee.getBody());
+
+			if (responsee.getStatusCode().is2xxSuccessful()) {
+				// Handle the response
+				jwtToken = responsee.getBody().getJwtToken();
+			}
+			
+		}catch (RestClientException e) {
+			// TODO Auto-generated catch block
+			System.out.println("RestClientException"+e);
+			e.printStackTrace();
+		}
+		return jwtToken;
+	}
+	public String validateToken(TokenValidateReqModel entity) {
+		System.out.println("validateToken=>"+entity.toString());
+		String valid = null;
+		
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			
+			ResponseEntity<TokenValidateRespModel> responsee = restTemplate.postForEntity(validateToken, entity, TokenValidateRespModel.class);
+			System.out.println("response==>"+responsee.getBody());
+			
+			if (responsee.getStatusCode().is2xxSuccessful()) {
+				// Handle the response
+				valid = responsee.getBody().getValid();
+			}
+			
+		}catch (RestClientException e) {
+			// TODO Auto-generated catch block
+			System.out.println("RestClientException"+e);
+			e.printStackTrace();
+		}
+		
+		return valid;
+	}
+	
+	
 
 	public ResponseObject validToken(String authorizationHeader) {
 		

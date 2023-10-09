@@ -2,7 +2,7 @@ package com.iti.util;
 import java.io.Serializable;
 import java.util.Map;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 
 import org.postgresql.util.HStoreConverter;
 import org.springframework.stereotype.Component;

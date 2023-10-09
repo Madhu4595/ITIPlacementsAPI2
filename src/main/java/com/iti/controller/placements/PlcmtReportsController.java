@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +39,9 @@ import com.iti.repo.placements.PlacementRepo;
 import com.iti.repo.placements.PlcmtScheduleEntryRepo;
 import com.iti.repo.transactions.AdmissionsRepo;
 import com.iti.util.MyUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/plcmt/")
